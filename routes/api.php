@@ -49,6 +49,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return view('auth.verify-email');
     })->middleware('auth')->name('verification.notice');
 
-    // API route for logout user
     Route::post('/logout', [AuthController::class, 'logout']);
 });
