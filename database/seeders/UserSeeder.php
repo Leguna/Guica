@@ -20,7 +20,6 @@ class UserSeeder extends Seeder
             'username' => 'leguna',
             'name' => 'Ahmad Tuflihun',
             'password' => Hash::make('password'),
-            'status' => 'aktif',
         ]);
     }
 }

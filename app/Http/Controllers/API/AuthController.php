@@ -62,9 +62,10 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         $user->tokens()->delete();
+        // $user->currentAccessToken()->delete();
 
         return [
-            'message' => 'You have successfully logged out and the token was successfully deleted'
+            'message' => 'You have successfully logged out'
         ];
     }
 }
