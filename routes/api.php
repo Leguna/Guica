@@ -19,12 +19,10 @@ Route::get('/', function () {
     ];
 });
 
-//API route for register new user
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-//API route for login user
 Route::post('/login', [AuthController::class, 'login'])->name("login");
 
-//Protecting Routes
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', function (Request $request) {
         return auth()->user();
