@@ -5,6 +5,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+Route::get('/', function () {
+    return [
+        "name" => "Guica",
+        "version" => "1.0",
+        "createdAt" => "14/11/2021",
+        "author" => "Ahmad Tuflihun",
+    ];
+});
+
 //API route for register new user
 Route::post('/register', [AuthController::class, 'register']);
 //API route for login user
@@ -18,6 +27,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // API route for logout user
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::prefix('v1')->apiResources('guild/card/');
 });
