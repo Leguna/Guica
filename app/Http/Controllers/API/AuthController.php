@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function resetPassword(Request $request)
+    {
+        $email = $request->email;
+        $user = User::where('email', '=', $email)->first();
+
+        // $user->sendResetEmail();
+    }
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
