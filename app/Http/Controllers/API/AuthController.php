@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,9 @@ class AuthController extends Controller
         $email = $request->email;
         $user = User::where('email', '=', $email)->first();
 
-        // $user->sendResetEmail();
+        $user->sendResetEmail();
     }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -39,6 +41,7 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
+        event(new Registered($user));
 
         return response()
             ->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer',]);

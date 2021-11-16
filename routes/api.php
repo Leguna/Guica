@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\EmailVerifyController;
 use App\Models\User;
 use App\Notifications\RequestTaken;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -23,34 +24,18 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name("login");
 
 
+// Send Mail
+Route::post('/reset-password', [AuthController::class, "resetPassword"])->name('reset-password');
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/profile', function (Request $request) {
+    Route::get('/profile', function () {
         return auth()->user();
-    });
+    })->middleware('verified');
+    Route::get('/email/verify/{id}/{hash}', [EmailVerifyController::class, 'verify'])->name('verification.verify');
+    Route::post('/email/verify/notif', [EmailVerifyController::class, 'verifyNotif'])->name('verification.send');
 
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-
-        $request->fulfill();
-
-        return redirect('/');
-    })->name('verification.verify');
-
-    Route::post('/email/verification-notification', function (Request $request) {
-
-        $request->user()->sendEmailVerificationNotification();
-
-        return response()->json([
-            "status" => true,
-            "message" => "Verification link sent!"
-        ]);
-    })->name('verification.send');
-
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email');
-    })->middleware('auth')->name('verification.notice');
+    Route::get('/email/verify', [EmailVerifyController::class, 'verifyEmailView'])->name('verification.notice');
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-
-
-Route::post('/reset-password', [AuthController::class, "resetPassword"])->name('reset-password');
